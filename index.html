@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitterwerk Katalog - Replica</title>
+    <style>
+        /* 基础样式与重置 (瑞士极简主义风格) */
+        :root {
+            --bg-color: #f4f4f4; /* 偏灰白的背景 */
+            --text-color: #111;
+            --accent-color: #e0e0e0;
+            --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* 经典无衬线字体 */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.4;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* 顶部导航栏 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--text-color);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .header-left, .header-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            text-transform: uppercase;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .search-bar input {
+            border: none;
+            border-bottom: 1px solid var(--text-color);
+            background: transparent;
+            padding: 2px 5px;
+            font-family: var(--font-family);
+            outline: none;
+        }
+
+        /* 统计与分类信息栏 */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            font-size: 12px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .stats-group {
+            display: flex;
+            gap: 30px;
+        }
+
+        /* 主体内容区：坐标网格 (模拟书架布局) */
+        main {
+            flex: 1;
+            position: relative;
+            display: flex;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        /* 左侧数字坐标轴 (4.0 到 0.0) */
+        .y-axis {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 40px;
+            font-size: 10px;
+            color: #666;
+            border-right: 1px solid #ccc;
+            padding-right: 10px;
+        }
+
+        /* 底部字母坐标轴 (A 到 S) */
+        .x-axis {
+            position: absolute;
+            bottom: 20px;
+            left: 60px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #666;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+
+        /* 网格展示区 */
+        .grid-area {
+            flex: 1;
+            position: relative;
+            margin-left: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* 模拟书籍/材料的点状物 */
+        .item-dot {
+            position: absolute;
+            width: 6px;
+            height: 18px;
+            background-color: var(--text-color);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .item-dot:hover {
+            transform: scale(1.5);
+            background-color: red;
+        }
+
+        /* 底部工作台 (Werkbank) */
+        footer {
+            height: 60px;
+            border-top: 1px solid var(--text-color);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <div class="logo">Sitterwerk Katalog</div>
+            <div class="lang">EN</div>
+        </div>
+        <div class="header-right">
+            <nav>
+                <a href="#">Katalog</a>
+                <a href="#">Intro</a>
+                <a href="#">Kontakt</a>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Suche...">
+            </div>
+        </div>
+    </header>
+
+    <div class="stats-bar">
+        <div class="stats-group">
+            <span>30 554 Bücher</span>
+            <span>2 658 Materialien</span>
+            <span>1 001 Zusammenstellungen</span>
+        </div>
+        <div class="stats-group">
+            <span>Stiftung Sitterwerk</span>
+            <span>Kunstbibliothek / Library</span>
+            <span>Werkstoffarchiv</span>
+        </div>
+    </div>
+
+    <main>
+        <div class="y-axis" id="yAxis">
+            </div>
+        
+        <div class="grid-area" id="gridArea">
+            </div>
+
+        <div class="x-axis" id="xAxis">
+            </div>
+    </main>
+
+    <footer>
+        Werkbank
+    </footer>
+
+    <script>
+        // 生成 Y 轴坐标 (4.0 到 0.0)
+        const yAxis = document.getElementById('yAxis');
+        for(let i = 4.0; i >= 0.0; i -= 0.5) {
+            let span = document.createElement('span');
+            span.textContent = i.toFixed(1);
+            yAxis.appendChild(span);
+        }
+
+        // 生成 X 轴坐标 (A 到 S)
+        const xAxis = document.getElementById('xAxis');
+        const letters = "ABCDEFGHIJKLMNOPQRS".split('');
+        letters.forEach(letter => {
+            let span = document.createElement('span');
+            span.textContent = letter;
+            xAxis.appendChild(span);
+        });
+
+        // 模拟生成 Katalog 中的数据点（书籍和材料）
+        const gridArea = document.getElementById('gridArea');
+        const itemCount = 150; // 模拟生成 150 个物件
+
+        for(let i = 0; i < itemCount; i++) {
+            let dot = document.createElement('div');
+            dot.classList.add('item-dot');
+            
+            // 随机分布在网格中
+            let randomX = Math.random() * 98; // 0% - 98%
+            let randomY = Math.random() * 95; // 0% - 95%
+            
+            // 随机高度和颜色变化模拟不同材料
+            let randomHeight = 10 + Math.random() * 20; 
+            
+            dot.style.left = `${randomX}%`;
+            dot.style.top = `${randomY}%`;
+            dot.style.height = `${randomHeight}px`;
+
+            // 偶尔有些是灰色的，代表不同类型的归档
+            if (Math.random() > 0.7) {
+                dot.style.backgroundColor = '#999';
+            }
+
+            gridArea.appendChild(dot);
+        }
+    </script>
+</body>
+</html>
